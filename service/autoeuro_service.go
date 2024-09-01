@@ -53,3 +53,8 @@ func (s *AutoeuroService) SearchItems(data requests_data.SearchItemsRequestData)
 func (s *AutoeuroService) CreateOrder(data requests_data.CreateOrderRequestData) (*responses.CreateOrderResponse, error) {
 	return client.Request[responses.CreateOrderResponse](s.ApiClient, "/create_order", data)
 }
+
+// GetOrders Получение списка текущих, завершенных и отменных товаров с деталями заказа
+func (s *AutoeuroService) GetOrders(data requests_data.GetOrdersRequestData) (*responses.GetOrdersResponse, error) {
+	return client.Request[responses.GetOrdersResponse](s.ApiClient, "/get_orders", data)
+}
