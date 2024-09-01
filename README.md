@@ -2,45 +2,56 @@
 
 Установка из npm:
 ```shell
-//
+go get github.com/LX4777/autoeuro-go-api-client@latest   
 ```
 
 Пример использования:
 ```go
-service := service2.NewAutoeuroService(client.ApiClientConfig{
-BaseURL: "https://api.autoeuro.ru/api/v2/json",
-Timeout: 2 * time.Second,
-Token:   "YOUR TOKEN",
+import (
+    "encoding/json"
+    "fmt"
+    "github.com/LX4777/autoeuro-go-api-client/client"
+    "github.com/LX4777/autoeuro-go-api-client/service"
+    "time"
+)
+
+autoeuroService := service.NewAutoeuroService(client.ApiClientConfig{
+    BaseURL: "https://api.autoeuro.ru/api/v2/json",
+    Timeout: 2 * time.Second,
+    Token:   "YOUR_TOKEN",
 })
 
-res, err := service.GetBalance();
+res, err := autoeuroService.GetBalance()
 
-res, err := service.GetDeliveries();
+res, err := autoeuroService.GetDeliveries()
 
-res, err := service.GetWarehouses(requests_data.GetWarehousesRequestData{DeliveryKey: "YOUR DELIVERY KEY"});
+res, err := autoeuroService.GetWarehouses(requests.GetWarehousesRequestData{DeliveryKey: "YOUR DELIVERY KEY"})
 
-res, err := service.GetPayers()
+res, err := autoeuroService.GetPayers()
 
-res, err := service.GetBrands()
+res, err := autoeuroService.GetBrands()
 
-res, err := service.SearchBrands(requests_data.SearchBrandsRequestData{Code: "lf16045"})
+res, err := autoeuroService.SearchBrands(requests.SearchBrandsRequestData{Code: "WDK962/12"})
 
-res, err := service.SearchItems(requests_data.SearchItemsRequestData{Code: "lf16045", Brand: "fleetguard", DeliveryKey: "YOUR DELIVERY KEY"})
+res, err := autoeuroService.SearchItems(requests.SearchItemsRequestData{
+    Code:        "lf16045",
+    Brand:       "fleetguard",
+    DeliveryKey: "YOUR DELIVERY KEY",
+})
 
 //Данный метод я не тестировал
-res, err := service.CreateOrder(requests_data.CreateOrderRequestData{})
+res, err := autoeuroService.CreateOrder(requests.CreateOrderRequestData{})
 
-res, err := service.GetOrders(requests_data.GetOrdersRequestData{})
+res, err := autoeuroService.GetOrders(requests.GetOrdersRequestData{})
 
-res, err := service.GetStatuses()
+res, err := autoeuroService.GetStatuses()
 
 if res != nil {
-str, _ := json.Marshal(res)
-fmt.Println(string(str))
+    str, _ := json.Marshal(res)
+    fmt.Println(string(str))
 } else {
-fmt.Println(err)
+    fmt.Println(err)
 }
-
 ```
 
 ## Примечания
