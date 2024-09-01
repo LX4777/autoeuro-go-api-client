@@ -1,9 +1,9 @@
 package service
 
 import (
-	c "autoeuro-go-api-client/client"
-	req "autoeuro-go-api-client/client/requests"
-	res "autoeuro-go-api-client/client/responses"
+	c "github.com/LX4777/autoeuro-go-api-client/client"
+	req "github.com/LX4777/autoeuro-go-api-client/client/requests"
+	res "github.com/LX4777/autoeuro-go-api-client/client/responses"
 )
 
 type AutoeuroService struct {
