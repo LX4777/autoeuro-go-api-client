@@ -33,3 +33,8 @@ func (s *AutoeuroService) GetWarehouses(data requests_data.GetWarehousesRequestD
 func (s *AutoeuroService) GetPayers() (*responses.GetPayersResponse, error) {
 	return client.Request[responses.GetPayersResponse](s.ApiClient, "/get_payers", nil)
 }
+
+// GetBrands Получение списка производителей
+func (s *AutoeuroService) GetBrands() (*responses.GetBrandsResponse, error) {
+	return client.Request[responses.GetBrandsResponse](s.ApiClient, "/get_brands", nil)
+}
