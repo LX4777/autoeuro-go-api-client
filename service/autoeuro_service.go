@@ -48,3 +48,8 @@ func (s *AutoeuroService) SearchBrands(data requests_data.SearchBrandsRequestDat
 func (s *AutoeuroService) SearchItems(data requests_data.SearchItemsRequestData) (*responses.SearchItemsResponse, error) {
 	return client.Request[responses.SearchItemsResponse](s.ApiClient, "/search_items", data)
 }
+
+// CreateOrder Оформление заказа
+func (s *AutoeuroService) CreateOrder(data requests_data.CreateOrderRequestData) (*responses.CreateOrderResponse, error) {
+	return client.Request[responses.CreateOrderResponse](s.ApiClient, "/create_order", data)
+}
