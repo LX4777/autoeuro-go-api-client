@@ -58,3 +58,8 @@ func (s *AutoeuroService) CreateOrder(data requests_data.CreateOrderRequestData)
 func (s *AutoeuroService) GetOrders(data requests_data.GetOrdersRequestData) (*responses.GetOrdersResponse, error) {
 	return client.Request[responses.GetOrdersResponse](s.ApiClient, "/get_orders", data)
 }
+
+// GetStatuses Список возможных статусов для списка заказов
+func (s *AutoeuroService) GetStatuses() (*responses.GetStatusesResponse, error) {
+	return client.Request[responses.GetStatusesResponse](s.ApiClient, "/get_statuses", nil)
+}
