@@ -38,3 +38,8 @@ func (s *AutoeuroService) GetPayers() (*responses.GetPayersResponse, error) {
 func (s *AutoeuroService) GetBrands() (*responses.GetBrandsResponse, error) {
 	return client.Request[responses.GetBrandsResponse](s.ApiClient, "/get_brands", nil)
 }
+
+// SearchBrands Получение списка брендов, у которых есть искомый артикул
+func (s *AutoeuroService) SearchBrands(data requests_data.SearchBrandsRequestData) (*responses.SearchBrandsResponse, error) {
+	return client.Request[responses.SearchBrandsResponse](s.ApiClient, "/search_brands", data)
+}
