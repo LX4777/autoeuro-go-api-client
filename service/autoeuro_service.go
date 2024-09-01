@@ -28,3 +28,8 @@ func (s *AutoeuroService) GetDeliveries() (*responses.GetDeliveriesResponse, err
 func (s *AutoeuroService) GetWarehouses(data requests_data.GetWarehousesRequestData) (*responses.GetWarehousesResponse, error) {
 	return client.Request[responses.GetWarehousesResponse](s.ApiClient, "/get_warehouses", data)
 }
+
+// GetPayers Получение списка плательщиков (подразделений) для клиента
+func (s *AutoeuroService) GetPayers() (*responses.GetPayersResponse, error) {
+	return client.Request[responses.GetPayersResponse](s.ApiClient, "/get_payers", nil)
+}
