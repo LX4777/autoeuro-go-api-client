@@ -1,4 +1,4 @@
-package requests_data
+package requests
 
 type GetOrdersRequestData struct {
 	Orders  []string      `json:"orders,omitempty"`

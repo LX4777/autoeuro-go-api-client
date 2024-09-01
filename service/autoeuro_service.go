@@ -2,7 +2,7 @@ package service
 
 import (
 	"autoeuro-go-api-client/client"
-	"autoeuro-go-api-client/requests_data"
+	"autoeuro-go-api-client/requests"
 	"autoeuro-go-api-client/responses"
 )
 
@@ -25,7 +25,7 @@ func (s *AutoeuroService) GetDeliveries() (*responses.GetDeliveriesResponse, err
 }
 
 // GetWarehouses Список складов, доступных клиенту для способа доставки
-func (s *AutoeuroService) GetWarehouses(data requests_data.GetWarehousesRequestData) (*responses.GetWarehousesResponse, error) {
+func (s *AutoeuroService) GetWarehouses(data requests.GetWarehousesRequestData) (*responses.GetWarehousesResponse, error) {
 	return client.Request[responses.GetWarehousesResponse](s.ApiClient, "/get_warehouses", data)
 }
 
@@ -40,22 +40,22 @@ func (s *AutoeuroService) GetBrands() (*responses.GetBrandsResponse, error) {
 }
 
 // SearchBrands Получение списка брендов, у которых есть искомый артикул
-func (s *AutoeuroService) SearchBrands(data requests_data.SearchBrandsRequestData) (*responses.SearchBrandsResponse, error) {
+func (s *AutoeuroService) SearchBrands(data requests.SearchBrandsRequestData) (*responses.SearchBrandsResponse, error) {
 	return client.Request[responses.SearchBrandsResponse](s.ApiClient, "/search_brands", data)
 }
 
 // SearchItems Поиск доступных для заказа товаров по бренду и коду с кроссами из наличия и под заказ
-func (s *AutoeuroService) SearchItems(data requests_data.SearchItemsRequestData) (*responses.SearchItemsResponse, error) {
+func (s *AutoeuroService) SearchItems(data requests.SearchItemsRequestData) (*responses.SearchItemsResponse, error) {
 	return client.Request[responses.SearchItemsResponse](s.ApiClient, "/search_items", data)
 }
 
 // CreateOrder Оформление заказа
-func (s *AutoeuroService) CreateOrder(data requests_data.CreateOrderRequestData) (*responses.CreateOrderResponse, error) {
+func (s *AutoeuroService) CreateOrder(data requests.CreateOrderRequestData) (*responses.CreateOrderResponse, error) {
 	return client.Request[responses.CreateOrderResponse](s.ApiClient, "/create_order", data)
 }
 
 // GetOrders Получение списка текущих, завершенных и отменных товаров с деталями заказа
-func (s *AutoeuroService) GetOrders(data requests_data.GetOrdersRequestData) (*responses.GetOrdersResponse, error) {
+func (s *AutoeuroService) GetOrders(data requests.GetOrdersRequestData) (*responses.GetOrdersResponse, error) {
 	return client.Request[responses.GetOrdersResponse](s.ApiClient, "/get_orders", data)
 }
 

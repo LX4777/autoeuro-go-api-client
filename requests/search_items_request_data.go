@@ -1,4 +1,4 @@
-package requests_data
+package requests
 
 type SearchItemsRequestData struct {
 	Brand       string `json:"brand"`

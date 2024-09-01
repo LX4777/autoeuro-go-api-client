@@ -1,4 +1,4 @@
-package requests_data
+package requests
 
 type GetWarehousesRequestData struct {
 	DeliveryKey string `json:"delivery_key"`

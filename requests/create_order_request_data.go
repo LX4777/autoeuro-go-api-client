@@ -1,4 +1,4 @@
-package requests_data
+package requests
 
 type CreateOrderRequestData struct {
 	DeliveryKey  string      `json:"delivery_key"`
