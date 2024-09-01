@@ -2,6 +2,7 @@ package service
 
 import (
 	"autoeuro-go-api-client/client"
+	"autoeuro-go-api-client/requests_data"
 	"autoeuro-go-api-client/responses"
 )
 
@@ -21,4 +22,9 @@ func (s *AutoeuroService) GetBalance() (*responses.GetBalanceResponse, error) {
 // GetDeliveries Получение массива возможных вариантов получения товара для клиента
 func (s *AutoeuroService) GetDeliveries() (*responses.GetDeliveriesResponse, error) {
 	return client.Request[responses.GetDeliveriesResponse](s.ApiClient, "/get_deliveries", nil)
+}
+
+// GetWarehouses Список складов, доступных клиенту для способа доставки
+func (s *AutoeuroService) GetWarehouses(data requests_data.GetWarehousesRequestData) (*responses.GetWarehousesResponse, error) {
+	return client.Request[responses.GetWarehousesResponse](s.ApiClient, "/get_warehouses", data)
 }
