@@ -1,6 +1,6 @@
 # Api клиент на Go для веб-сервиса Авто-Евро
 
-Установка из npm:
+Установка:
 ```shell
 go get github.com/LX4777/autoeuro-go-api-client@latest   
 ```
