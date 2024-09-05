@@ -1,8 +1,8 @@
 package requests
 
 type GetOrdersRequestData struct {
-	Orders  []string      `json:"orders,omitempty"`
-	Filters *OrderFilters `json:"filters,omitempty"`
+	Orders  []int64        `json:"orders,omitempty"`
+	Filters []OrderFilters `json:"filters,omitempty"`
 }
 
 type OrderFilters struct {
