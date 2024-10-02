@@ -3,7 +3,7 @@
 // Автор: Rozhkov Vasiliy <profilrv@gmail.com> (GitHub: https://github.com/LX4777)
 // Лицензия: MIT (https://opensource.org/licenses/MIT)
 //
-// Данный пакет реализует работу со всеми функциями веб-сервиса дату 01.09.2024
+// Данный пакет реализует работу со всеми функциями веб-сервиса на дату 01.09.2024
 //
 // Для дополнительной информации посетите репозиторий: https://github.com/LX4777/autoeuro-go-api-client
 
