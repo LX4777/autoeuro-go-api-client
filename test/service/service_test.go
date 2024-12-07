@@ -164,27 +164,42 @@ func TestSearchItems(t *testing.T) {
 	defer ts.Close()
 
 	response, err := ts.Service.SearchItems(requests.SearchItemsRequestData{})
+	expData := responses.SearchItem{
+		OfferKey:        "2",
+		Stock:           33,
+		Brand:           "Brand2",
+		Code:            "Code2",
+		Name:            "Item 2",
+		Packing:         2,
+		Price:           240.0,
+		Currency:        "USD",
+		Amount:          3,
+		Unit:            "кт",
+		Return:          2,
+		OrderBefore:     "3",
+		DeliveryTime:    "1211",
+		DeliveryTimeMax: "2322",
+		Rejects:         95.0,
+		Dealer:          0,
+		WarehouseName:   "WHN2",
+		WarehouseKey:    "WHK2",
+	}
+	if response != nil {
+		assert.Equal(t, expData, response.DATA[3])
+		cross := uint8(2)
+		expData.Price = 240.3
+		expData.Cross = &cross
+		assert.Equal(t, expData, response.DATA[0])
+		expData.Price = 240
+		assert.Equal(t, expData, response.DATA[1])
+		expData.Cross = nil
+		assert.Equal(t, expData, response.DATA[2])
+		assert.Equal(t, len(response.DATA), 4, "неожиданное количество элементов")
+		assert.IsTypef(t, responses.SearchItemsResponse{}, *response, "тип ответа не соответствует ожидаемому")
+	} else {
+		assert.Fail(t, "ответ не получен")
+	}
 
 	assert.NoError(t, err, "Неожиданная ошибка от SearchItems")
 	assert.NotNil(t, response, "Ответ не получен")
-	assert.Equal(t, len(response.DATA), 4, "неожиданное количество элементов")
-	assert.IsTypef(t, responses.SearchItemsResponse{}, *response, "тип ответа не соответствует ожидаемому")
-	assert.Equal(t, "2", response.DATA[0].OfferKey, "неожиданное значение OfferKey")
-	assert.Equal(t, 33, response.DATA[0].Stock, "неожиданное значение Stock")
-	assert.Equal(t, "Brand2", response.DATA[0].Brand, "неожиданное значение Brand")
-	assert.Equal(t, "Code2", response.DATA[0].Code, "неожиданное значение Code")
-	assert.Equal(t, "Item 2", response.DATA[0].Name, "неожиданное значение Name")
-	assert.Equal(t, 2, response.DATA[0].Packing, "неожиданное значение Packing")
-	assert.Equal(t, float32(240.3), response.DATA[0].Price, "неожиданное значение Price")
-	assert.Equal(t, "USD", response.DATA[0].Currency, "неожиданное значение Currency")
-	assert.Equal(t, 3, response.DATA[0].Amount, "неожиданное значение Amount")
-	assert.Equal(t, "кт", response.DATA[0].Unit, "неожиданное значение Unit")
-	assert.Equal(t, uint8(2), response.DATA[0].Return, "неожиданное значение Return")
-	assert.Equal(t, "3", response.DATA[0].OrderBefore, "неожиданное значение OrderBefore")
-	assert.Equal(t, "1211", response.DATA[0].DeliveryTime, "неожиданное значение DeliveryTime")
-	assert.Equal(t, "2322", response.DATA[0].DeliveryTimeMax, "неожиданное значение DeliveryTimeMax")
-	assert.Equal(t, float32(95.0), response.DATA[0].Rejects, "неожиданное значение Rejects")
-	assert.Equal(t, 0, response.DATA[0].Dealer, "неожиданное значение Dealer")
-	assert.Equal(t, "WHN2", response.DATA[0].WarehouseName, "неожиданное значение WarehouseName")
-	assert.Equal(t, "WHK2", response.DATA[0].WarehouseKey, "неожиданное значение WarehouseKey")
 }
