@@ -1,12 +1,16 @@
 package service
 
 import (
+	"github.com/LX4777/autoeuro-go-api-client/client"
+	"github.com/LX4777/autoeuro-go-api-client/service"
 	"net/http"
 	"net/http/httptest"
+	"time"
 )
 
 type TestServer struct {
-	Server *httptest.Server
+	Server  *httptest.Server
+	Service *service.AutoeuroService
 }
 
 func NewTestServer(expectedPath string, json []byte) *TestServer {
@@ -22,8 +26,15 @@ func NewTestServer(expectedPath string, json []byte) *TestServer {
 		}
 	}))
 
+	s := service.NewAutoeuroService(client.ApiClientConfig{
+		BaseURL: server.URL,
+		Token:   "test-api-key",
+		Timeout: 10 * time.Second,
+	})
+
 	return &TestServer{
-		Server: server,
+		Server:  server,
+		Service: s,
 	}
 }
 

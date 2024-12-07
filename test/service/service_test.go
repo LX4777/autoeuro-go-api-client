@@ -2,12 +2,9 @@ package service
 
 import (
 	"encoding/json"
-	"github.com/LX4777/autoeuro-go-api-client/client"
 	"github.com/LX4777/autoeuro-go-api-client/client/responses"
-	"github.com/LX4777/autoeuro-go-api-client/service"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"time"
 )
 
 func TestGetBalance(t *testing.T) {
@@ -25,21 +22,15 @@ func TestGetBalance(t *testing.T) {
 			},
 		},
 	}
-	mockJson, err := json.Marshal(mockResponse)
-	if err != nil {
+	mockJson, marshalErr := json.Marshal(mockResponse)
+	if marshalErr != nil {
 		t.Errorf("ошибка маршалинга")
 	}
 
 	ts := NewTestServer("/get_balance", mockJson)
 	defer ts.Close()
 
-	s := service.NewAutoeuroService(client.ApiClientConfig{
-		BaseURL: ts.Server.URL,
-		Token:   "test-api-key",
-		Timeout: 10 * time.Second,
-	})
-
-	response, err := s.GetBalance()
+	response, err := ts.Service.GetBalance()
 
 	assert.NoError(t, err, "Неожиданная ошибка от GetBalance")
 	assert.NotNil(t, response, "Ответ равен nil")
