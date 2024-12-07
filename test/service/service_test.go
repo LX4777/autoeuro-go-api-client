@@ -43,3 +43,28 @@ func TestGetBalance(t *testing.T) {
 	assert.Equal(t, mockResponse.DATA[0].ShippingFrom, response.DATA[0].ShippingFrom, "Неожиданное значение shippingForm")
 	assert.Equal(t, mockResponse.DATA[0].Active, response.DATA[0].Active, "Неожиданное значение active")
 }
+
+func TestGetBrands(t *testing.T) {
+	jsonMock := `
+	{
+		"DATA": [
+			{
+				"brand": "MANN-FILTER"
+			},
+			{
+				"brand": "MANN"
+			}
+		]
+	}`
+
+	ts := NewTestServer("/get_brands", []byte(jsonMock))
+	defer ts.Close()
+
+	response, err := ts.Service.GetBrands()
+
+	assert.NoError(t, err, "Неожиданная ошибка от GetBrands")
+	assert.NotNil(t, response, "Ответ не получен")
+	assert.Equal(t, 2, len(response.DATA), "длина массива не равна 2")
+	assert.Equal(t, "MANN-FILTER", response.DATA[0].Brand, "имя бренда не соответствует ожидаемому")
+	assert.Equal(t, "MANN", response.DATA[1].Brand, "имя бренда не соответствует ожидаемому")
+}
