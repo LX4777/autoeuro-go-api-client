@@ -33,9 +33,10 @@ type SearchItem struct {
 func (s *SearchItem) UnmarshalJSON(data []byte) error {
 	type Alias SearchItem
 	aux := &struct {
-		Cross  interface{} `json:"cross"`
-		Price  string      `json:"price"`
-		Return string      `json:"return"`
+		Cross   any `json:"cross"`
+		Price   any `json:"price"`
+		Return  any `json:"return"`
+		Packing any `json:"packing"`
 		*Alias
 	}{
 		Alias: (*Alias)(s),
@@ -54,7 +55,7 @@ func (s *SearchItem) UnmarshalJSON(data []byte) error {
 			} else {
 				val, err := strconv.ParseUint(v, 10, 8)
 				if err != nil {
-					return fmt.Errorf("failed to convert cross to uint8: %w", err)
+					return fmt.Errorf("ошибка конвертации поля Cross из string в uint8: %w", err)
 				}
 				cross := uint8(val)
 				s.Cross = &cross
@@ -66,18 +67,54 @@ func (s *SearchItem) UnmarshalJSON(data []byte) error {
 	}
 
 	// Обработка поля Price
-	price, err := strconv.ParseFloat(aux.Price, 32)
-	if err != nil {
-		return fmt.Errorf("failed to convert price to float32: %w", err)
+	switch v := aux.Price.(type) {
+	case string:
+		price, err := strconv.ParseFloat(v, 32)
+		if err != nil {
+			return fmt.Errorf("ошибка конвертации поля Price из string в float32: %w", err)
+		}
+		s.Price = float32(price)
+	case float32:
+		s.Price = v
+	case float64:
+		s.Price = float32(v)
+	default:
+		return fmt.Errorf("ошибка конвертации поля Price: неизвестный тип %T", v)
 	}
-	s.Price = float32(price)
 
 	// Обработка поля Return
-	ret, err := strconv.ParseUint(aux.Return, 10, 8)
-	if err != nil {
-		return fmt.Errorf("failed to convert return to uint8: %w", err)
+	switch v := aux.Return.(type) {
+	case string:
+		ret, err := strconv.ParseUint(v, 10, 8)
+		if err != nil {
+			return fmt.Errorf("ошибка конвертации поля Return в uint8: %w", err)
+		}
+		s.Return = uint8(ret)
+	case uint8:
+		s.Return = v
+	case int:
+		s.Return = uint8(v)
+	case float64:
+		s.Return = uint8(v)
+	default:
+		return fmt.Errorf("ошибка конвертации поля Return: неизвестный тип %T", v)
 	}
-	s.Return = uint8(ret)
+
+	// Обработка поля Packing
+	switch v := aux.Packing.(type) {
+	case string:
+		i, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			return fmt.Errorf("ошибка конвертации поля Packing из string в int64: %w (значение поля: %v)", err, v)
+		}
+		s.Packing = int(i)
+	case int:
+		s.Packing = v
+	case float64:
+		s.Packing = int(v)
+	default:
+		return fmt.Errorf("ошибка конвертации поля Packing: неизвестный тип %T", v)
+	}
 
 	return nil
 }
