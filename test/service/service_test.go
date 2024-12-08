@@ -237,3 +237,37 @@ func TestGetWarehouses(t *testing.T) {
 	assert.Equal(t, "warehouseKEY2", response.DATA[1].WarehouseKey, "WarehouseKEY не соответствует ожидаемому")
 	assert.Equal(t, "warehouseNAME2", response.DATA[1].WarehouseName, "WarehouseNAME не соответствует ожидаемому")
 }
+
+func TestGetDeliveries(t *testing.T) {
+	jsonMock := `
+	{
+		"DATA": [
+			{
+				"delivery_key": "del1",
+				"name": "name1",
+				"time_shift_msk": "4"
+			},
+			{
+				"delivery_key": "del2",
+				"name": "name2",
+				"time_shift_msk": 2 
+			}
+		]
+	}`
+
+	ts := NewTestServer("/get_deliveries", []byte(jsonMock))
+	defer ts.Close()
+
+	response, err := ts.Service.GetDeliveries()
+
+	assert.NoError(t, err, "Неожиданная ошибка")
+	assert.NotNil(t, response, "Ответ не получен")
+	assert.Equal(t, 2, len(response.DATA), "длина массива не совпадает")
+	assert.IsTypef(t, responses.GetDeliveriesResponse{}, *response, "тип ответа не соответствует ожидаемому")
+	assert.Equal(t, "del1", response.DATA[0].DeliveryKey, "поле не соответствует ожидаемому")
+	assert.Equal(t, "name1", response.DATA[0].Name, "поле не соответствует ожидаемому")
+	assert.Equal(t, uint8(4), response.DATA[0].TimeShiftMSK, "поле не соответствует ожидаемому")
+	assert.Equal(t, "del2", response.DATA[1].DeliveryKey, "поле не соответствует ожидаемому")
+	assert.Equal(t, "name2", response.DATA[1].Name, "поле не соответствует ожидаемому")
+	assert.Equal(t, uint8(2), response.DATA[1].TimeShiftMSK, "поле не соответствует ожидаемому")
+}
