@@ -203,3 +203,37 @@ func TestSearchItems(t *testing.T) {
 	assert.NoError(t, err, "Неожиданная ошибка от SearchItems")
 	assert.NotNil(t, response, "Ответ не получен")
 }
+
+func TestGetWarehouses(t *testing.T) {
+	jsonMock := `
+	{
+		"DATA": [
+			{
+				"warehouse_id": "warehouseID",
+				"warehouse_key": "warehouseKEY",
+				"warehouse_name": "warehouseNAME"
+			},
+			{
+				"warehouse_id": "warehouseID2",
+				"warehouse_key": "warehouseKEY2",
+				"warehouse_name": "warehouseNAME2"
+			}
+		]
+	}`
+
+	ts := NewTestServer("/get_warehouses", []byte(jsonMock))
+	defer ts.Close()
+
+	response, err := ts.Service.GetWarehouses(requests.GetWarehousesRequestData{})
+
+	assert.NoError(t, err, "Неожиданная ошибка от GetDeliveries")
+	assert.NotNil(t, response, "Ответ не получен")
+	assert.Equal(t, 2, len(response.DATA), "длина массива не совпадает")
+	assert.IsTypef(t, responses.GetWarehousesResponse{}, *response, "тип ответа не соответствует ожидаемому")
+	assert.Equal(t, "warehouseID", response.DATA[0].WarehouseID, "WarehouseID не соответствует ожидаемому")
+	assert.Equal(t, "warehouseKEY", response.DATA[0].WarehouseKey, "WarehouseKEY не соответствует ожидаемому")
+	assert.Equal(t, "warehouseNAME", response.DATA[0].WarehouseName, "WarehouseNAME не соответствует ожидаемому")
+	assert.Equal(t, "warehouseID2", response.DATA[1].WarehouseID, "WarehouseID не соответствует ожидаемому")
+	assert.Equal(t, "warehouseKEY2", response.DATA[1].WarehouseKey, "WarehouseKEY не соответствует ожидаемому")
+	assert.Equal(t, "warehouseNAME2", response.DATA[1].WarehouseName, "WarehouseNAME не соответствует ожидаемому")
+}
