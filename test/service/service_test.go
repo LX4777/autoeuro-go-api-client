@@ -369,3 +369,63 @@ func TestCreateOrder(t *testing.T) {
 	assert.Equal(t, false, response.DATA[1].Result, "поле не соответствует ожидаемому")
 	assert.Equal(t, "res2", response.DATA[1].ResultDescription, "поле не соответствует ожидаемому")
 }
+
+func TestGetOrders(t *testing.T) {
+	jsonMock := `
+	{
+		"DATA": [
+			{
+				"brand": "ExampleBrand",
+				"code": "EX12345",
+				"name": "Example Product",
+				"price": 123.45,
+				"amount": 10,
+				"unit": "pcs",
+				"dealer": 1,
+				"cancelable": 0,
+				"returnable": 1,
+				"status_id": 2,
+				"status": "In Progress",
+				"document": "INV-2024-001",
+				"order_id": 101,
+				"comment": "Urgent delivery requested.",
+				"united": 0,
+				"order_date": "2024-12-08T10:30:00Z",
+				"order_number": "ORD123456",
+				"delivery": "Standard Shipping",
+				"delivery_date": "2024-12-15T16:00:00Z",
+				"order_key": "abc123xyz"
+			}
+		]
+	}`
+
+	ts := NewTestServer("/get_orders", []byte(jsonMock))
+	defer ts.Close()
+
+	response, err := ts.Service.GetOrders(requests.GetOrdersRequestData{})
+
+	assert.NoError(t, err, "Неожиданная ошибка")
+	assert.NotNil(t, response, "Ответ не получен")
+	assert.Equal(t, 1, len(response.DATA), "длина массива не совпадает")
+	assert.IsTypef(t, responses.GetOrdersResponse{}, *response, "тип ответа не соответствует ожидаемому")
+	assert.Equal(t, "ExampleBrand", response.DATA[0].Brand, "поле не соответствует ожидаемому")
+	assert.Equal(t, "EX12345", response.DATA[0].Code, "поле не соответствует ожидаемому")
+	assert.Equal(t, "Example Product", response.DATA[0].Name, "поле не соответствует ожидаемому")
+	assert.Equal(t, 123.45, response.DATA[0].Price, "поле не соответствует ожидаемому")
+	assert.Equal(t, 10, response.DATA[0].Amount, "поле не соответствует ожидаемому")
+	assert.Equal(t, "pcs", response.DATA[0].Unit, "поле не соответствует ожидаемому")
+	assert.Equal(t, 1, response.DATA[0].Dealer, "поле не соответствует ожидаемому")
+	assert.Equal(t, 0, response.DATA[0].Cancelable, "поле не соответствует ожидаемому")
+	assert.Equal(t, 1, response.DATA[0].Returnable, "поле не соответствует ожидаемому")
+	assert.Equal(t, 2, response.DATA[0].StatusID, "поле не соответствует ожидаемому")
+	assert.Equal(t, "In Progress", response.DATA[0].Status, "поле не соответствует ожидаемому")
+	assert.Equal(t, "INV-2024-001", response.DATA[0].Document, "поле не соответствует ожидаемому")
+	assert.Equal(t, 101, response.DATA[0].OrderID, "поле не соответствует ожидаемому")
+	assert.Equal(t, "Urgent delivery requested.", response.DATA[0].Comment, "поле не соответствует ожидаемому")
+	assert.Equal(t, 0, response.DATA[0].United, "поле не соответствует ожидаемому")
+	assert.Equal(t, "2024-12-08T10:30:00Z", response.DATA[0].OrderDate, "поле не соответствует ожидаемому")
+	assert.Equal(t, "ORD123456", response.DATA[0].OrderNumber, "поле не соответствует ожидаемому")
+	assert.Equal(t, "Standard Shipping", response.DATA[0].Delivery, "поле не соответствует ожидаемому")
+	assert.Equal(t, "2024-12-15T16:00:00Z", response.DATA[0].DeliveryDate, "поле не соответствует ожидаемому")
+	assert.Equal(t, "abc123xyz", response.DATA[0].OrderKey, "поле не соответствует ожидаемому")
+}
