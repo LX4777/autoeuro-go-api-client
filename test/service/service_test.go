@@ -335,3 +335,37 @@ func TestSearchBrands(t *testing.T) {
 	assert.Equal(t, "code2", response.DATA[1].Code, "поле не соответствует ожидаемому")
 	assert.Equal(t, "name2", response.DATA[1].Name, "поле не соответствует ожидаемому")
 }
+
+func TestCreateOrder(t *testing.T) {
+	jsonMock := `
+	{
+		"DATA": [
+			{
+				"order_id": 1,
+				"result": true,
+				"result_description": "res1"
+			},
+			{
+				"order_id": 2,
+				"result": false,
+				"result_description": "res2"
+			}
+		]
+	}`
+
+	ts := NewTestServer("/create_order", []byte(jsonMock))
+	defer ts.Close()
+
+	response, err := ts.Service.CreateOrder(requests.CreateOrderRequestData{})
+
+	assert.NoError(t, err, "Неожиданная ошибка")
+	assert.NotNil(t, response, "Ответ не получен")
+	assert.Equal(t, 2, len(response.DATA), "длина массива не совпадает")
+	assert.IsTypef(t, responses.CreateOrderResponse{}, *response, "тип ответа не соответствует ожидаемому")
+	assert.Equal(t, 1, response.DATA[0].OrderID, "поле не соответствует ожидаемому")
+	assert.Equal(t, true, response.DATA[0].Result, "поле не соответствует ожидаемому")
+	assert.Equal(t, "res1", response.DATA[0].ResultDescription, "поле не соответствует ожидаемому")
+	assert.Equal(t, 2, response.DATA[1].OrderID, "поле не соответствует ожидаемому")
+	assert.Equal(t, false, response.DATA[1].Result, "поле не соответствует ожидаемому")
+	assert.Equal(t, "res2", response.DATA[1].ResultDescription, "поле не соответствует ожидаемому")
+}
