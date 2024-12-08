@@ -18,7 +18,7 @@ type Status struct {
 func (s *Status) UnmarshalJSON(data []byte) error {
 	type Alias Status
 	aux := &struct {
-		StatusID interface{} `json:"status_id"` // Используем interface{} для обработки разных типов данных
+		StatusID any `json:"status_id"`
 		*Alias
 	}{
 		Alias: (*Alias)(s),
@@ -28,18 +28,17 @@ func (s *Status) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	// Обработка поля StatusID
 	switch v := aux.StatusID.(type) {
 	case string:
 		val, err := strconv.ParseUint(v, 10, 16)
 		if err != nil {
-			return fmt.Errorf("failed to convert status_id to uint16: %w", err)
+			return fmt.Errorf("ошибка конвертации поля status_id в uint16: %w", err)
 		}
 		s.StatusID = uint16(val)
 	case float64:
 		s.StatusID = uint16(v)
 	default:
-		return fmt.Errorf("unexpected type for status_id: %T", v)
+		return fmt.Errorf("ошибка: неожиданный для поля status_id тип: %T", v)
 	}
 
 	return nil

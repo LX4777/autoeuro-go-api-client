@@ -17,7 +17,7 @@ type Delivery struct {
 func (d *Delivery) UnmarshalJSON(data []byte) error {
 	type Alias Delivery
 	aux := &struct {
-		TimeShiftMsk interface{} `json:"time_shift_msk"` // Используем interface{} для обработки разных типов данных
+		TimeShiftMsk any `json:"time_shift_msk"`
 		*Alias
 	}{
 		Alias: (*Alias)(d),
@@ -32,13 +32,13 @@ func (d *Delivery) UnmarshalJSON(data []byte) error {
 	case string:
 		shift, err := strconv.Atoi(v)
 		if err != nil {
-			return fmt.Errorf("failed to convert time_shift_msk to int: %w", err)
+			return fmt.Errorf("ошибка конвертации time_shift_msk в int: %w", err)
 		}
 		d.TimeShiftMSK = uint8(shift)
 	case float64:
 		d.TimeShiftMSK = uint8(v)
 	default:
-		return fmt.Errorf("unexpected type for time_shift_msk: %T", v)
+		return fmt.Errorf("ошибка конвертации: поступил time_shift_msk неизвестного типа: %T", v)
 	}
 
 	return nil
