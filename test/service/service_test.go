@@ -429,3 +429,41 @@ func TestGetOrders(t *testing.T) {
 	assert.Equal(t, "2024-12-15T16:00:00Z", response.DATA[0].DeliveryDate, "поле не соответствует ожидаемому")
 	assert.Equal(t, "abc123xyz", response.DATA[0].OrderKey, "поле не соответствует ожидаемому")
 }
+
+func TestGetStatuses(t *testing.T) {
+	jsonMock := `
+	{
+		"DATA": [
+			{
+			  "group": "OrderStatus",
+			  "status_id": 1,
+			  "name": "Pending",
+			  "description": "The order is awaiting processing."
+			},
+			{
+			  "group": "OrderStatus 2",
+			  "status_id": "2",
+			  "name": "Pending2",
+			  "description": "The order 2 is awaiting processing."
+			}
+		]
+	}`
+
+	ts := NewTestServer("/get_statuses", []byte(jsonMock))
+	defer ts.Close()
+
+	response, err := ts.Service.GetStatuses()
+
+	assert.NoError(t, err, "Неожиданная ошибка")
+	assert.NotNil(t, response, "Ответ не получен")
+	assert.Equal(t, 2, len(response.DATA), "длина массива не совпадает")
+	assert.IsTypef(t, responses.GetStatusesResponse{}, *response, "тип ответа не соответствует ожидаемому")
+	assert.Equal(t, "OrderStatus", response.DATA[0].Group, "поле не соответствует ожидаемому")
+	assert.Equal(t, uint16(1), response.DATA[0].StatusID, "поле не соответствует ожидаемому")
+	assert.Equal(t, "Pending", response.DATA[0].Name, "поле не соответствует ожидаемому")
+	assert.Equal(t, "The order is awaiting processing.", response.DATA[0].Description, "поле не соответствует ожидаемому")
+	assert.Equal(t, "OrderStatus 2", response.DATA[1].Group, "поле не соответствует ожидаемому")
+	assert.Equal(t, uint16(2), response.DATA[1].StatusID, "поле не соответствует ожидаемому")
+	assert.Equal(t, "Pending2", response.DATA[1].Name, "поле не соответствует ожидаемому")
+	assert.Equal(t, "The order 2 is awaiting processing.", response.DATA[1].Description, "поле не соответствует ожидаемому")
+}
