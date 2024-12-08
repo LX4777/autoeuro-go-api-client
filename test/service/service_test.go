@@ -271,3 +271,33 @@ func TestGetDeliveries(t *testing.T) {
 	assert.Equal(t, "name2", response.DATA[1].Name, "поле не соответствует ожидаемому")
 	assert.Equal(t, uint8(2), response.DATA[1].TimeShiftMSK, "поле не соответствует ожидаемому")
 }
+
+func TestGetPayers(t *testing.T) {
+	jsonMock := `
+	{
+		"DATA": [
+			{
+				"payer_name": "name1",
+				"payer_key": "key1"
+			},
+			{
+				"payer_name": "name2",
+				"payer_key": "key2"
+			}
+		]
+	}`
+
+	ts := NewTestServer("/get_payers", []byte(jsonMock))
+	defer ts.Close()
+
+	response, err := ts.Service.GetPayers()
+
+	assert.NoError(t, err, "Неожиданная ошибка")
+	assert.NotNil(t, response, "Ответ не получен")
+	assert.Equal(t, 2, len(response.DATA), "длина массива не совпадает")
+	assert.IsTypef(t, responses.GetPayersResponse{}, *response, "тип ответа не соответствует ожидаемому")
+	assert.Equal(t, "name1", response.DATA[0].PayerName, "поле не соответствует ожидаемому")
+	assert.Equal(t, "key1", response.DATA[0].PayerKey, "поле не соответствует ожидаемому")
+	assert.Equal(t, "name2", response.DATA[1].PayerName, "поле не соответствует ожидаемому")
+	assert.Equal(t, "key2", response.DATA[1].PayerKey, "поле не соответствует ожидаемому")
+}
